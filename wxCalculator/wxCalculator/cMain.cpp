@@ -82,9 +82,9 @@ void cMain::OnBasicClicked(wxCommandEvent& evt)
 
 void cMain::Calculate() const
 {
-	exprtk::expression<unsigned long long> exp;
+	exprtk::expression<double> exp;
 
-	exprtk::parser<unsigned long long> parser;
+	exprtk::parser<double> parser;
 
 	const std::string inputString = input->GetLabel().utf8_string();
 
@@ -94,6 +94,8 @@ void cMain::Calculate() const
 		return;
 	}
 
-	unsigned long long result = exp.value();
+	double result = exp.value();
+
+	output->SetLabel(std::to_string(result));
 }
 
