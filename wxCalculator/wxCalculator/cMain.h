@@ -11,6 +11,7 @@ public:
 
 public:
 	wxButton** basic;
+	wxStaticText* input;
 	wxStaticText* output;
 
 	bool negative = false;

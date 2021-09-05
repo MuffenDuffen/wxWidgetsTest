@@ -6,8 +6,15 @@ wxEND_EVENT_TABLE()
 cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 {
 	auto* masterSizer = new wxBoxSizer(wxVERTICAL);
+
+	const wxFont font = wxFont(25, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 	
-	output = new wxStaticText(this, 0, "", wxPoint(0, 0), wxSize(100, 32));
+	input = new wxStaticText(this, 0, "", wxPoint(0, 0), wxSize(100, 35));
+	input->SetFont(font);
+	masterSizer->Add(input, 1, wxEXPAND, wxDOWN);
+
+	output = new wxStaticText(this, 0, "lol", wxPoint(0, 0), wxSize(100, 35));
+	output->SetFont(font);
 	masterSizer->Add(output, 1, wxEXPAND, wxDOWN);
 
 	basic = new wxButton * [12];
@@ -32,9 +39,12 @@ cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 	basicSizers[1] = new wxBoxSizer(wxHORIZONTAL);
 	basicSizers[2] = new wxBoxSizer(wxHORIZONTAL);
 	basicSizers[3] = new wxBoxSizer(wxHORIZONTAL);
+	
+	const wxFont basicFont = wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_THIN);
 
 	for (int i = 0; i < 12; ++i)
 	{
+		basic[i]->SetFont(basicFont);
 		basicSizers[i / 3]->Add(basic[i], 1, wxEXPAND, wxALL);
 		if (i % 3 == 0)masterSizer->Add(basicSizers[i / 3], 1, wxEXPAND, wxALL);
 		basic[i]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &cMain::OnBasicClicked, this);
@@ -55,16 +65,16 @@ void cMain::OnBasicClicked(wxCommandEvent& evt)
 	if (evt.GetId() == 1009)
 	{
 		negative = !negative;
-		wxString label = output->GetLabel();
-		(negative) ? output->SetLabel("-" + label) : output->SetLabel(label.Remove(0, 1));
+		wxString label = input->GetLabel();
+		(negative) ? input->SetLabel("-" + label) : input->SetLabel(label.Remove(0, 1));
 	}
 	else if (evt.GetId() == 1011)
 	{
-		output->SetLabel(output->GetLabel() + '.');
+		input->SetLabel(input->GetLabel() + '.');
 	}
 	else
 	{
-		output->SetLabel(output->GetLabel() + basic[evt.GetId() - 1000]->GetLabel());
+		input->SetLabel(input->GetLabel() + basic[evt.GetId() - 1000]->GetLabel());
 	}
 	evt.Skip();
 }
