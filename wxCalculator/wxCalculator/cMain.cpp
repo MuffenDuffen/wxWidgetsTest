@@ -23,7 +23,7 @@ cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 	basic[8] = new wxButton(this, 1008, "9");
 	basic[9] = new wxButton(this, 1009, "+/-");
 	basic[10] = new wxButton(this, 1010, "0");
-	basic[11] = new wxButton(this, 1011, "=");
+	basic[11] = new wxButton(this, 1011, ".");
 
 	// ReSharper disable once IdentifierTypo
 	wxBoxSizer* basicSizers[4];
@@ -60,8 +60,7 @@ void cMain::OnBasicClicked(wxCommandEvent& evt)
 	}
 	else if (evt.GetId() == 1011)
 	{
-		wxString label = output->GetLabel();
-		Calculate(label);
+		output->SetLabel(output->GetLabel() + '.');
 	}
 	else
 	{
