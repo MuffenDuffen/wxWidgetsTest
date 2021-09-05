@@ -1,4 +1,5 @@
 #include "cMain.h"
+#include "exprtk.hpp"
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
 wxEND_EVENT_TABLE()
@@ -13,7 +14,7 @@ cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 	input->SetFont(font);
 	masterSizer->Add(input, 1, wxEXPAND, wxDOWN);
 
-	output = new wxStaticText(this, 0, "lol", wxPoint(0, 0), wxSize(100, 35));
+	output = new wxStaticText(this, 0, "", wxPoint(0, 0), wxSize(100, 35));
 	output->SetFont(font);
 	masterSizer->Add(output, 1, wxEXPAND, wxDOWN);
 
@@ -79,8 +80,20 @@ void cMain::OnBasicClicked(wxCommandEvent& evt)
 	evt.Skip();
 }
 
-int cMain::Calculate(wxString& text)
+void cMain::Calculate() const
 {
-	return std::stoi(text.utf8_string());
+	exprtk::expression<unsigned long long> exp;
+
+	exprtk::parser<unsigned long long> parser;
+
+	const std::string inputString = input->GetLabel().utf8_string();
+
+	if (!parser.compile(inputString, exp))
+	{
+		printf("Compilation error...\n");
+		return;
+	}
+
+	unsigned long long result = exp.value();
 }
 

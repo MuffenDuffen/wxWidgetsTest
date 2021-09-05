@@ -17,7 +17,7 @@ public:
 	bool negative = false;
 
 	void OnBasicClicked(wxCommandEvent& evt);
-	int Calculate(wxString& text);
+	void Calculate() const;
 
 	wxDECLARE_EVENT_TABLE();
 };
