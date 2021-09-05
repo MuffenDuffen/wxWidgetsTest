@@ -91,7 +91,6 @@ void cMain::Calculate() const
 	if (!parser.compile(inputString, exp))
 	{
 		printf("Compilation error...\n");
-		return;
 	}
 
 	double result = exp.value();
