@@ -1,4 +1,4 @@
-#include "cMain.h"
+﻿#include "cMain.h"
 #include "exprtk.hpp"
 
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
@@ -14,7 +14,7 @@ cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 	input->SetFont(font);
 	masterSizer->Add(input, 1, wxEXPAND, wxDOWN);
 
-	output = new wxStaticText(this, 0, "", wxPoint(0, 0), wxSize(100, 35));
+	output = new wxStaticText(this, 0, "", wxPoint(0, 0), wxSize(100, 40));
 	output->SetFont(font);
 	masterSizer->Add(output, 1, wxEXPAND, wxDOWN);
 
@@ -23,10 +23,10 @@ cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 	buttons[0] = new wxButton(this, 1000, "%");
 	buttons[1] = new wxButton(this, 1001, "CE");
 	buttons[2] = new wxButton(this, 1002, "C");
-	buttons[3] = new wxButton(this, 1003, "del");
+	buttons[3] = new wxButton(this, 1003, "Del");
 	buttons[4] = new wxButton(this, 1004, "1/x");
 	buttons[5] = new wxButton(this, 1005, "x^2");
-	buttons[6] = new wxButton(this, 1006, "sqrt(x)");
+	buttons[6] = new wxButton(this, 1006, "Sqrt(x)");
 	buttons[7] = new wxButton(this, 1007, "/");
 	buttons[8] = new wxButton(this, 1008, "7");
 	buttons[9] = new wxButton(this, 1009, "8");
@@ -79,61 +79,127 @@ void cMain::OnBasicClicked(wxCommandEvent& evt)
 {
 	switch (evt.GetId())
 	{
+		//%
 		case 1000:
 			input->SetLabel("0");
 			break;
+		//CE
 		case 1001:
 			input->SetLabel(input->GetLabel().Remove(input->GetLabel().find_last_not_of("0123456789")));
 			break;
-		case 1002: 
+		//C
+		case 1002:
+			input->SetLabel("");
+			output->SetLabel("");
 			break;
-		case 1003: 
+		//Del
+		case 1003:
+			input->SetLabel(input->GetLabel().substr(0, input->GetLabel().length() - 1));
 			break;
-		case 1004: 
+		//(1/x)
+		case 1004:
+			input->SetLabel(input->GetLabel().substr(0, input->GetLabel().length() - currentNumberChunk.length()));
+			input->SetLabel(input->GetLabel() + "1/(" + currentNumberChunk + ")");
+			currentNumberChunk = "";
 			break;
-		case 1005: 
+		//(x^2)
+		case 1005:
+			input->SetLabel(input->GetLabel().substr(0, input->GetLabel().length() - currentNumberChunk.length()));
+			input->SetLabel(input->GetLabel() + "(" + currentNumberChunk + "^" + "2" + ")");
+			currentNumberChunk = "";
 			break;
-		case 1006: 
+		//(Sqrt(x))
+		case 1006:
+			input->SetLabel(input->GetLabel().substr(0, input->GetLabel().length() - currentNumberChunk.length()));
+			input->SetLabel(input->GetLabel() + "(sqrt(" + currentNumberChunk + "))");
+			currentNumberChunk = "";
 			break;
-		case 1007: 
+		//(/)
+		case 1007:
+			input->SetLabel(input->GetLabel() + "/");
+			currentNumberChunk = "";
 			break;
-		case 1008: 
+		//7
+		case 1008:
+			input->SetLabel(input->GetLabel() + "7");
+			currentNumberChunk += "7";
 			break;
-		case 1010: 
+		//8
+		case 1009:
+			input->SetLabel(input->GetLabel() + "8");
+			currentNumberChunk += "8";
 			break;
-		case 1011: 
+		//9
+		case 1010:
+			input->SetLabel(input->GetLabel() + "9");
+			currentNumberChunk += "9";
 			break;
-		case 1012: 
+		//(*)
+		case 1011:
+			input->SetLabel(input->GetLabel() + "*");
+			currentNumberChunk = "";
 			break;
-		case 1013: 
+		//4
+		case 1012:
+			input->SetLabel(input->GetLabel() + "4");
+			currentNumberChunk += "4";
 			break;
-		case 1014: 
+		//5
+		case 1013:
+			input->SetLabel(input->GetLabel() + "5");
+			currentNumberChunk += "5";
 			break;
-		case 1015: 
+		//6
+		case 1014:
+			input->SetLabel(input->GetLabel() + "6");
+			currentNumberChunk += "6";
 			break;
-		case 1016: 
+		//(-)
+		case 1015:
+			input->SetLabel(input->GetLabel() + "-");
+			currentNumberChunk = "";
 			break;
-		case 1017: 
+		//1
+		case 1016:
+			input->SetLabel(input->GetLabel() + "1");
+			currentNumberChunk += "1";
 			break;
-		case 1018: 
+		//2
+		case 1017:
+			input->SetLabel(input->GetLabel() + "2");
+			currentNumberChunk += "2";
 			break;
-		case 1019: 
+		//3
+		case 1018:
+			input->SetLabel(input->GetLabel() + "3");
+			currentNumberChunk += "3";
 			break;
+		//(+)
+		case 1019:
+			input->SetLabel(input->GetLabel() + "+");
+			currentNumberChunk = "";
+			break;
+		//(+/-)
 		case 1020:
 			negative = !negative;
 			(negative) ? input->SetLabel("-" + input->GetLabel()) : input->SetLabel(input->GetLabel().Remove(0, 1));
 			break;
-		case 1021: 
+		//0
+		case 1021:
+			input->SetLabel(input->GetLabel() + "0");
+			currentNumberChunk += "0";
 			break;
+		//.
 		case 1022:
 			input->SetLabel(input->GetLabel() + '.');
 			break;
+		//Calculate
 		case 1023: 
-			break;
+			Calculate();
 	}
 	evt.Skip();
 }
-
+	
 void cMain::Calculate() const
 {
 	exprtk::expression<double> exp;

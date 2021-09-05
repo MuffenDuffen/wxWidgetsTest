@@ -15,6 +15,7 @@ public:
 	wxStaticText* output;
 
 	bool negative = false;
+	wxString currentNumberChunk = "";
 
 	void OnBasicClicked(wxCommandEvent& evt);
 	void Calculate() const;
