@@ -6,5 +6,18 @@ class cMain : public wxFrame
 public:
 	cMain();
 	~cMain();
+	
+	
+
+public:
+	wxButton** basic;
+	wxStaticText* output;
+
+	bool negative = false;
+
+	void OnBasicClicked(wxCommandEvent& evt);
+	int Calculate(wxString& text);
+
+	wxDECLARE_EVENT_TABLE();
 };
 
