@@ -196,6 +196,8 @@ void cMain::OnBasicClicked(wxCommandEvent& evt)
 		//Calculate
 		case 1023: 
 			Calculate();
+			input->SetLabel("");
+			break;
 	}
 	evt.Skip();
 }
@@ -215,6 +217,19 @@ void cMain::Calculate() const
 
 	double result = exp.value();
 
-	output->SetLabel(std::to_string(result));
+	std::string str = std::to_string(result);
+
+	if (str.find('.') != std::string::npos)
+	{
+		// Remove trailing zeroes
+		str = str.substr(0, str.find_last_not_of('0') + 1);
+		// If the decimal point is now the last character, remove that as well
+		if (str.find('.') == str.size() - 1)
+		{
+			str = str.substr(0, str.size() - 1);
+		}
+	}
+	
+	output->SetLabel(str);
 }
 
