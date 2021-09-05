@@ -18,37 +18,51 @@ cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 	output->SetFont(font);
 	masterSizer->Add(output, 1, wxEXPAND, wxDOWN);
 
-	basic = new wxButton * [12];
+	buttons = new wxButton * [24];
 
-	basic[0] = new wxButton(this, 1000, "1");
-	basic[1] = new wxButton(this, 1001, "2");
-	basic[2] = new wxButton(this, 1002, "3");
-	basic[3] = new wxButton(this, 1003, "4");
-	basic[4] = new wxButton(this, 1004, "5");
-	basic[5] = new wxButton(this, 1005, "6");
-	basic[6] = new wxButton(this, 1006, "7");
-	basic[7] = new wxButton(this, 1007, "8");
-	basic[8] = new wxButton(this, 1008, "9");
-	basic[9] = new wxButton(this, 1009, "+/-");
-	basic[10] = new wxButton(this, 1010, "0");
-	basic[11] = new wxButton(this, 1011, ".");
+	buttons[0] = new wxButton(this, 1000, "%");
+	buttons[1] = new wxButton(this, 1001, "CE");
+	buttons[2] = new wxButton(this, 1002, "C");
+	buttons[3] = new wxButton(this, 1003, "del");
+	buttons[4] = new wxButton(this, 1004, "1/x");
+	buttons[5] = new wxButton(this, 1005, "x^2");
+	buttons[6] = new wxButton(this, 1006, "sqrt(x)");
+	buttons[7] = new wxButton(this, 1007, "/");
+	buttons[8] = new wxButton(this, 1008, "7");
+	buttons[9] = new wxButton(this, 1009, "8");
+	buttons[10] = new wxButton(this, 1010, "9");
+	buttons[11] = new wxButton(this, 1011, "*");
+	buttons[12] = new wxButton(this, 1011, "4");
+	buttons[13] = new wxButton(this, 1011, "5");
+	buttons[14] = new wxButton(this, 1011, "6");
+	buttons[15] = new wxButton(this, 1011, "-");
+	buttons[16] = new wxButton(this, 1011, "1");
+	buttons[17] = new wxButton(this, 1011, "2");
+	buttons[18] = new wxButton(this, 1011, "3");
+	buttons[19] = new wxButton(this, 1011, "+");
+	buttons[20] = new wxButton(this, 1011, "+/-");
+	buttons[21] = new wxButton(this, 1011, "0");
+	buttons[22] = new wxButton(this, 1011, ".");
+	buttons[23] = new wxButton(this, 1011, "=");
 
 	// ReSharper disable once IdentifierTypo
-	wxBoxSizer* basicSizers[4];
+	wxBoxSizer* sizers[6];
 
-	basicSizers[0] = new wxBoxSizer(wxHORIZONTAL);
-	basicSizers[1] = new wxBoxSizer(wxHORIZONTAL);
-	basicSizers[2] = new wxBoxSizer(wxHORIZONTAL);
-	basicSizers[3] = new wxBoxSizer(wxHORIZONTAL);
+	sizers[0] = new wxBoxSizer(wxHORIZONTAL);
+	sizers[1] = new wxBoxSizer(wxHORIZONTAL);
+	sizers[2] = new wxBoxSizer(wxHORIZONTAL);
+	sizers[3] = new wxBoxSizer(wxHORIZONTAL);
+	sizers[4] = new wxBoxSizer(wxHORIZONTAL);
+	sizers[5] = new wxBoxSizer(wxHORIZONTAL);
 	
 	const wxFont basicFont = wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_THIN);
 
-	for (int i = 0; i < 12; ++i)
+	for (int i = 0; i < 24; ++i)
 	{
-		basic[i]->SetFont(basicFont);
-		basicSizers[i / 3]->Add(basic[i], 1, wxEXPAND, wxALL);
-		if (i % 3 == 0)masterSizer->Add(basicSizers[i / 3], 1, wxEXPAND, wxALL);
-		basic[i]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &cMain::OnBasicClicked, this);
+		buttons[i]->SetFont(basicFont);
+		sizers[i / 3]->Add(buttons[i], 1, wxEXPAND, wxALL);
+		if (i % 4 == 0)masterSizer->Add(sizers[i / 4], 1, wxEXPAND, wxALL);
+		buttons[i]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &cMain::OnBasicClicked, this);
 	}
 	
 	this->SetSizerAndFit(masterSizer);
@@ -58,7 +72,7 @@ cMain::cMain() : wxFrame(nullptr, 0, "Calculator", wxDefaultPosition)
 
 cMain::~cMain()
 {
-	delete basic;
+	delete buttons;
 }
 
 void cMain::OnBasicClicked(wxCommandEvent& evt)
@@ -75,7 +89,7 @@ void cMain::OnBasicClicked(wxCommandEvent& evt)
 	}
 	else
 	{
-		input->SetLabel(input->GetLabel() + basic[evt.GetId() - 1000]->GetLabel());
+		input->SetLabel(input->GetLabel() + buttons[evt.GetId() - 1000]->GetLabel());
 	}
 	evt.Skip();
 }

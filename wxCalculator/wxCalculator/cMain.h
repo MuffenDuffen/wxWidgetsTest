@@ -10,7 +10,7 @@ public:
 	
 
 public:
-	wxButton** basic;
+	wxButton** buttons;
 	wxStaticText* input;
 	wxStaticText* output;
 
